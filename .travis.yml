@@ -1,2 +1,3 @@
 language: csharp
 solution: TrayFolder.sln
+os: windows

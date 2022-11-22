@@ -1,2 +1,8 @@
 # TrayFolder
-Windows 11 "Add new toolbar" equivalent
+
+Windows 10 "Add new toolbar" equivalent for Windows 11
+
+___
+
+![tray.png](.github/tray.png)
+![settings.png](.github/settings.png)

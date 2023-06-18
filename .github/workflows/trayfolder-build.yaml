@@ -24,8 +24,8 @@ jobs:
 
     - name: Copy files for release
       run: |
-        copy bin\TrayFolder.exe
-        copy bin\TrayFolder.exe.config
+        copy bin\Release\TrayFolder.exe
+        copy bin\Release\TrayFolder.exe.config
 
     # - name: Determine Version
     #   run: |

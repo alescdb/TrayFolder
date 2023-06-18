@@ -1,0 +1,42 @@
+name: Build TrayFolder
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Setup MSBuild Path
+      uses: microsoft/setup-msbuild@v1.0.3
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+
+    - name: Restore NuGet Packages
+      run: nuget restore TrayFolder.sln
+
+    - name: Build and Publish
+      run: msbuild TrayFolder.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
+
+    - name: Copy files for release
+      run: |
+        copy bin\TrayFolder.exe
+        copy bin\TrayFolder.exe.config
+
+    # - name: Determine Version
+    #   run: |
+    #     $r = Get-Content .\TrayFolder\Properties\AssemblyInfo.cs | Select-String -Pattern 'AssemblyVersion\("(?<version>.*)\.\*'
+    #     Write-Host "version=$($r.Matches.Groups.Value)" >> $env:GITHUB_ENV
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: "TrayFolder"
+        path: |
+          TrayFolder.exe
+          TrayFolder.exe.config
+          README.md

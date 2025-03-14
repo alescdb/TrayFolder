@@ -17,13 +17,8 @@ specific language governing permissions and limitations
 under the License.    
 */
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TrayFolder
@@ -42,6 +37,8 @@ namespace TrayFolder
     {
       this.SystemIcons = SystemIcons;
     }
+
+
 
     public String GetFileName( String FilePath )
     {
@@ -122,12 +119,31 @@ namespace TrayFolder
     {
       try
       {
-        Process.Start(((ToolStripMenuItem)sender).Tag as String);
+        string path = ((ToolStripMenuItem)sender).Tag as String;
+        if(IsLink(path))
+        {
+          ProcessStartInfo psi = new ProcessStartInfo
+          {
+            FileName = "explorer.exe",
+            Arguments = "\"" + path + "\"",
+            UseShellExecute = true
+          };
+          Process.Start(psi);
+        }
+        else
+        {
+          Process.Start(path);
+        }
       }
       catch(Exception ex)
       {
         MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
+    }
+
+    private bool IsLink( string path )
+    {
+      return String.Compare((Path.GetExtension(path) ?? "").ToLower(), ".lnk") == 0;
     }
   }
 }
